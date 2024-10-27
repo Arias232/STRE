@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Player - Live 🔴</title>
+    <link rel="stylesheet" href="https://cdn.plyr.io/3.6.8/plyr.css" />
+    <style>
+        .header-image-container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 20px 0;
+            display: flex;
+            justify-content: left;
+            background-color: #4b6ddd;
+            border-radius: 7px;
+        }
+
+        .header-image-container img {
+            width: 100%;
+            max-width: 200px;
+            border-radius: 10px;
+        }
+
+        body {
+            background-color: #ffffff;
+            color: #161515;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        .main-container {
+            display: flex;
+            justify-content: center;
+            width: 90%;
+            max-width: 1200px;
+            margin: 20px 0;
+        }
+
+        .featured-player-container {
+            flex: 3; /* Ocupa más espacio que el chat */
+            background-color: #2f2f85;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            padding: 20px;
+            margin-right: 20px;
+        }
+
+        video {
+            width: 100%;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            cursor: pointer;
+        }
+
+        .message {
+            color: #ffffff;
+            text-align: center;
+            margin-top: 50px;
+            transition: opacity 0.5s ease-in-out;
+            opacity: 0;
+        }
+
+        .message.show {
+            opacity: 1;
+        }
+
+        h2 {
+            color: #ffeeee;
+            margin-bottom: 10px;
+        }
+
+        h2:hover {
+            color: hsl(0, 100%, 61%);
+            transition: color 0.3s ease;
+        }
+
+        #chat h3 {
+    color: #ffffff; /* Color del texto */
+    margin: 10px 0; /* Espaciado arriba y abajo */
+    text-align: center; 
+    font-size: 15px; 
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; /* Fuente bonita */
+    font-weight: bold; 
+    letter-spacing: 1px; 
+}
+
+
+        .plyr__control--overlaid, .plyr__control {
+            background: #4b6ddd;
+        }
+
+        @media (max-width: 768px) {
+            .main-container {
+                flex-direction: column;
+            }
+        }
+
+        /* Estilos del chat */
+        #chat-box {
+            flex: 1; /* Ocupa menos espacio comparado con el stream */
+            background-color: rgb(235, 236, 241);
+            border: 1px solid #2018ba;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 10px;
+            max-height: 800px;
+            width: 350px; /* Ajusta el ancho del chat */
+        }
+
+        #chat {
+            flex: 1;
+            overflow-y: scroll;
+            border: 1px solid #ccc;
+            padding: 10px;
+            background: linear-gradient(45deg, #1c1589, #c11818);
+            border-radius: 5px;
+        }
+
+        /* Mensajes dentro del chat */
+        p {
+            margin: 0;
+            padding: 5px 10px;
+            background-color: #e1e1e1;
+            border-radius: 10px;
+            margin-bottom: 10px;
+            word-wrap: break-word;
+        }
+
+        .input-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        input[type="text"] {
+            width: 80%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+
+        button {
+            padding: 10px 20px;
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        /* Estilos para los streams secundarios */
+        .secondary-streams-container {
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            width: 100%;
+            margin-top: 20px;
+        }
+
+        /* Diseño tipo tarjeta */
+        .secondary-streams-container {
+        display: flex;
+        justify-content: space-around;
+        flex-wrap: wrap;
+        width: 100%;
+        margin-top: 20px;
+    }
+
+    /* Diseño tipo tarjeta con color azul similar al stream principal */
+    .secondary-stream {
+        width: 30%;
+        background-color: #2f2f85; /* Color azul similar al stream principal */
+        border-radius: 10px;
+        padding: 15px;
+        margin: 10px;
+        text-align: center;
+        cursor: pointer;
+        transition: transform 0.3s ease;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .secondary-stream video {
+        width: 100%;
+        border-radius: 5px;
+        margin-bottom: 10px;
+    }
+
+    .secondary-stream:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    }
+
+    .secondary-stream h3 {
+        margin: 10px 0;
+        font-size: 16px;
+        color: #ffffff; /* Color blanco para el texto */
+    }
+
+            /* Estilo para el formulario de nombre */
+            #nombre-form {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        #nombre-input {
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+
+        #nombre-boton {
+            padding: 10px 20px;
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        #nombre-boton:hover {
+            background-color: #0056b3;
+        }
+        
+    </style>
+</head>
+<body>
+    <div class="header-image-container">
+        <img src="Img/logo3.png">
+        <h1 class="title">Live Streaming - UMG</h1>
+    </div>
+
+    <div class="main-container">
+   
+
+        <!-- Video principal -->
+        <div class="featured-player-container">
+            <h2>Featured Stream</h2>
+            <video id="featured-player" playsinline controls></video>
+            <p id="featured-message" class="message show">Regresa pronto...</p>
+        </div>
+
+<!-- Chat a la derecha -->
+<div id="chat-box">
+    <div id="chat"></div>
+    
+    <!-- Contenedor para la entrada del chat y el formulario -->
+    <div class="input-container">
+        <input id="mensaje" placeholder="Escribe un mensaje..." />
+        <button onclick="enviarMensaje()">Enviar</button>
+    </div>
+
+    <div id="nombre-form">
+        <input type="text" id="nombre-input" placeholder="Ingresa tu nombre" required />
+        <button id="nombre-boton" onclick="setNombre()">Enviar</button>
+    </div>
+</div>
+
+            </div>
+        </div>
+    </div>
+
+
+    <script src="https://cdn.rawgit.com/video-dev/hls.js/18bb552/dist/hls.min.js"></script>
+    <script src="https://cdn.plyr.io/3.6.8/plyr.js"></script>
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+        let nombre = ''; // Variable para almacenar el nombre
+
+        // Función para establecer el nombre y ocultar el formulario
+        function setNombre() {
+    const nombreInput = document.getElementById('nombre-input');
+    nombre = nombreInput.value;
+
+    // Verifica si el nombre está vacío
+    if (nombre.trim() === '') {
+        alert('Por favor, ingresa un nombre.');
+        return;
+    }
+
+    // Oculta el formulario y muestra el nombre en la parte superior del chat
+    document.getElementById('nombre-form').style.display = 'none';
+    const chat = document.getElementById('chat');
+    chat.insertAdjacentHTML('afterbegin', `<h3>Bienvenido, ${nombre}</h3>`);
+}
+
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const setupPlayer = (id, source) => {
+                const video = document.querySelector(id);
+                const message = document.querySelector(id.replace('player', 'message'));
+
+                const player = new Plyr(video, {
+                    autoplay: true,
+                    controls: ['play-large', 'play', 'mute', 'volume', 'settings', 'pip', 'airplay', 'fullscreen']
+                });
+
+                if (!Hls.isSupported()) {
+                    video.src = source;
+                    video.onloadeddata = () => { message.classList.toggle('show', false); };
+                    video.onerror = () => { message.classList.toggle('show', true); };
+                } else {
+                    const hls = new Hls();
+                    hls.loadSource(source);
+                    hls.attachMedia(video);
+                    hls.on(Hls.Events.MANIFEST_PARSED, () => {
+                        message.classList.toggle('show', false);
+                    });
+                    hls.on(Hls.Events.ERROR, () => {
+                        message.classList.toggle('show', true);
+                    });
+                    window[`hls_${id}`] = hls;
+                }
+
+                window[`player_${id}`] = player;
+            };
+
+            setupPlayer('#featured-player', 'https://umg.life/hls/stream.m3u8');
+        });
+
+        const socket = io();
+
+        socket.on('mensaje', function (msg) {
+            const chat = document.getElementById('chat');
+            chat.innerHTML += `<p>${msg}</p>`;
+            chat.scrollTop = chat.scrollHeight; 
+        });
+
+        function enviarMensaje() {
+            const mensaje = document.getElementById('mensaje').value;
+            // Enviar mensaje solo si se ha ingresado un nombre
+            if (nombre.trim() === '') {
+                alert('Por favor, ingresa tu nombre antes de enviar un mensaje.');
+                return;
+            }
+            socket.emit('mensaje', `${nombre}: ${mensaje}`); // Incluye el nombre en el mensaje
+            document.getElementById('mensaje').value = '';
+        }
+
+        function cambiarStream(nuevaFuente) {
+            setupPlayer('#featured-player', nuevaFuente);
+        }
+    </script>
+</body>
+</html>
